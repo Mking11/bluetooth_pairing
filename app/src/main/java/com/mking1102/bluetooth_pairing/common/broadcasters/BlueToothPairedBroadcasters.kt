@@ -58,7 +58,6 @@ class BlueToothPairedBroadcasters @Inject constructor(
         }
 
         override fun peekService(myContext: Context?, service: Intent?): IBinder {
-            println(service)
             return super.peekService(myContext, service)
         }
     }

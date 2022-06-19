@@ -34,11 +34,9 @@ class BlueToothPairedRequestBroadcasters @Inject constructor(
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 BluetoothDevice.ACTION_BOND_STATE_CHANGED ->{
-                    println("blue tooth paired chang${intent}")
 
                     val device:BluetoothDevice?  =intent.getParcelableExtra(EXTRA_DEVICE)
 
-                    println("bonded ${device} ${device?.uuids}")
                  scope.scope.launch {
                      device?.let { connectionState.emit(it) }
                  }

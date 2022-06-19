@@ -67,36 +67,10 @@ class PairDevice : Fragment() {
             PairedBluetoothListAdapter(object :
                 PairedBluetoothListAdapter.CustomListeners {
                 override fun onItemSelected(position: BluetoothDevice) {
-                    println("clicked ${position}")
-
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        if (ActivityCompat.checkSelfPermission(
-                                requireContext(),
-                                Manifest.permission.BLUETOOTH_CONNECT
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-
-                            println("uuids ${position.uuids}")
-                            position.uuids.forEach {
-                                println("uuids ${it}")
-                            }
-                        }
-                    } else {
-
-                        position.uuids?.forEach {
-                            println("it${it}")
-                        }
-                    }
 
 
                     position.setPin("000000".toByteArray())
-                    position.createBond().apply {
-                        if (this) {
-//                            println("create bond ${this}")
-//
-                        }
-                    }
+                    position.createBond()
 
 
                 }
@@ -105,7 +79,6 @@ class PairDevice : Fragment() {
 
         lifecycleScope.launch {
             blueToothPairedRequestBroadcasters.sharedFlow.collect {
-                println("blue tooth ${it}")
 
                 connectionThread =
                     ConnectThread(it, requireContext())
@@ -119,9 +92,7 @@ class PairDevice : Fragment() {
         recyclerView.adapter = adapter
 
         viewModel.devices.observe(viewLifecycleOwner) {
-            println("map ${it}")
             adapter.submitList(it.values.toList())
-
         }
 
         lifecycleScope.launch {
@@ -129,26 +100,6 @@ class PairDevice : Fragment() {
 
                 when (it) {
                     is BlueToothBroadCastingState.DeviceFound -> {
-                        val device: BluetoothDevice? =
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                if (ActivityCompat.checkSelfPermission(
-                                        requireContext(),
-                                        Manifest.permission.BLUETOOTH_SCAN
-                                    ) != PackageManager.PERMISSION_GRANTED
-                                ) {
-                                    it.device
-                                } else {
-
-                                    null
-                                }
-                            } else {
-                                it.device
-                            }
-                        println("device ${device?.name}")
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            println("device ${device?.alias}")
-                        }
-                        println("device ${device?.address}")
 
                         viewModel.addDevice(it.device)
                     }
@@ -177,10 +128,6 @@ class PairDevice : Fragment() {
             bluetoothAdapter.startDiscovery()
         }
 
-
-
-
-
         return binding.root
     }
 
@@ -188,7 +135,7 @@ class PairDevice : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         if (this::connectionThread.isInitialized) {
-
+            connectionThread.cancel()
         }
 
         blueToothPairedBroadcasters.closeBroadCasters()
@@ -277,11 +224,9 @@ class PairDevice : Fragment() {
         override fun run() {
             bluetoothAdapter.cancelDiscovery()
             try {
-                mmSocket?.let {
-                    it.connect()
-                }
+                mmSocket?.connect()
             } catch (e: Exception) {
-                println(e)
+                e.printStackTrace()
             }
         }
 

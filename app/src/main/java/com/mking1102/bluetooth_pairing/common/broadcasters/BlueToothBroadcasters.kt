@@ -32,7 +32,6 @@ class BlueToothBroadcasters @Inject constructor(
 
     private val broadCastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            println("bluetooth state changed")
 
             if (intent?.action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
 
