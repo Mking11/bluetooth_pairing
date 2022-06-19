@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="40dp"
+    android:layout_width="match_parent">
+
+    <TextView
+        android:id="@+id/bluetooth_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:singleLine="true"
+        android:textAlignment="textStart"
+        android:textColor="#121111"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:text="rtt" />
+</androidx.cardview.widget.CardView>
+
+

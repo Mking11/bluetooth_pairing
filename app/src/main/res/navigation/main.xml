@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    app:startDestination="@id/bluetoothlist">
+
+    <fragment
+        android:id="@+id/bluetoothlist"
+        android:name="com.mking1102.bluetooth_pairing.BluetoothPairedList"
+        android:label="BluetoothList">
+        <action
+            android:id="@+id/action_bluetoothlist_to_pairDevice"
+            app:destination="@id/pairDevice" />
+    </fragment>
+    <fragment
+        android:id="@+id/pairDevice"
+        android:name="com.mking1102.bluetooth_pairing.PairDevice"
+        android:label="PairDevice" />
+</navigation>
